@@ -24,6 +24,7 @@
     "@types/gulp-typescript": "0.0.32",
     "@types/gulp-uglify": "0.0.29",
     "@types/node": "^6.0.41",
+    "@types/pg": "^6.1.33",
     "browser-sync": "^2.17.0",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
@@ -37,6 +38,7 @@
   },
   "dependencies": {
     "body-parser": "^1.15.2",
-    "express": "^4.14.0"
+    "express": "^4.14.0",
+    "pg": "^6.1.0"
   }
 }
