@@ -1,6 +1,8 @@
 import * as express from 'express';
 import * as body_parser from 'body-parser';
-import { router as bookRouter } from './routes/book.router';
+// import { router as bookRouter } from './routes/book.router';
+import bookRouter = require('./routes/book.router');
+import humanRouter = require('./routes/human.router');
 import { Promise } from 'es6-promise';
 import { Pool, PoolConfig, QueryResult } from 'pg';
 
@@ -17,29 +19,29 @@ let config: PoolConfig = {
 let pool = new Pool(config);
 let app = express();
 let port = 8080;
+let brouter = bookRouter(pool);
 app.use(body_parser.urlencoded({ extended: true }));
 app.use(body_parser.json());
 
-app.use((req, res, next) => {
-    console.log('happen 1');
-    next();
-});
+// app.use((req, res, next) => {
+//     console.log('happen 1');
+//     next();
+// });
 
-app.use('/api', (req, res, next) => {
-    bookRouter(req, res, next);
-    next();
-});
+app.use('/api',[bookRouter(pool),humanRouter(pool)]);
 
-app.use((req, res, next) => {
-    console.log('happen 2');
-    next();
-});
+
+// app.use((req, res, next) => {
+//     console.log('happen 2');
+//     next();
+// });
 
 /**
  * hàm này dùng để thử cách sử dụng Promise
  */
 function getAllBokk(): Promise<any[]>{
     return new Promise<any[]>((resolve, reject) => {
+        
         pool.connect((err, client, done) => {
             if (err) {
                 // console.error('error fetching client from pool', err);
@@ -55,7 +57,7 @@ function getAllBokk(): Promise<any[]>{
                 }
                 // console.log(result.rows);
                 resolve(result.rows);
-            });
+            }); 
         });
     });
 }
@@ -66,8 +68,14 @@ app.use('/test', (req, res) => {
     })
     .catch(err => {
         console.error('Failed', err);
-        res.send(err);
+        res.send(err.message);
     });
+});
+
+app.use('/test2/:name?',(req,res) => {
+    pool.query('select * from book',(err,result) =>{
+        res.json(result.rows);
+    })
 });
 
 app.listen(port);
