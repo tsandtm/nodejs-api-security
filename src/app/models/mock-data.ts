@@ -1,8 +1,43 @@
-import {Book} from './book'
+import * as Sequelize from 'sequelize';
+import { BookModel, BookInstance } from './book.model';
+import { WriterModel, WriterInstance, WriterId } from './writer.model';
 
-export let books: Book[] = [
-    new Book('nodejs','some one'),
-    new Book('typescript','microsoft'),
-    new Book('express','some one else'),
-    new Book('ohhhh','the other one')
-];
+
+// tạo các dữ liệu sẵn
+export = function (bookModel: BookModel, writerModel: WriterModel) {
+
+    bookModel.sync({force:true}).then(()=>{
+        bookModel.bulkCreate([
+            {
+                name: 'book1'
+            },
+            {
+                name: 'book2'
+            },
+            {
+                name: 'book3'
+            }
+        ])
+    });
+
+    writerModel.sync({force:true}).then(()=>{
+        writerModel.bulkCreate([
+            {
+                name: 'hong duc'
+            },
+            {
+                name: 'Jimmy'
+            },
+            {
+                name: 'Jane the savior'
+            }
+        ])
+    })
+
+
+
+
+
+
+
+}

@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/bluebird": "^3.0.35",
     "@types/body-parser": "0.0.33",
     "@types/browser-sync": "0.0.33",
     "@types/del": "^2.2.31",
@@ -27,6 +28,7 @@
     "@types/pg": "^6.1.33",
     "@types/pg-pool": "0.0.2",
     "@types/pg-promise": "0.0.28",
+    "@types/sequelize": "^4.0.38",
     "browser-sync": "^2.17.0",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
@@ -39,10 +41,13 @@
     "typescript": "^2.0.3"
   },
   "dependencies": {
+    "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "pg": "^6.1.0",
+    "pg-hstore": "^2.3.2",
     "pg-pool": "^1.5.0",
-    "pg-promise": "^5.3.4"
+    "pg-promise": "^5.3.4",
+    "sequelize": "^3.24.3"
   }
 }

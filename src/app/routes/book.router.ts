@@ -1,97 +1,86 @@
 import { Router } from 'express';
-import { Book } from '../models/book';
+// import { Book } from '../models/book';
 // import { books } from '../models/mock-data';
+import {BookModel} from '../models/book.model';
 import { Pool, Client, QueryResult } from 'pg';
 
 // export const router = Router();
 
-export = function (query: Pool): Router {
-    let pool: Pool = query;
+export = function (bookModel: BookModel): Router {
     let router: Router = Router();
 
-    // router.get('/book', (req, res) => {
-    //     pool.query('select * from book')
-    //     res.json(books);
-    // });
-
-    // router.post('/book', (req, res) => {
-    //     let book = new Book(req.body.name, req.body.author);
-    //     books.push(book);
-    //     res.json({ message: 'book created', book: book });
-    // });
 
 
-    router.route('/book/:bookName?')
+    router.route('/book')
 
+        //lay het sach, hoac lay sach theo id
         .get((req, res) => {
-            if (!req.params.bookName) {
-                pool.query('select * from book', (err, result) => {
-                    if (err) {
-                        return res.send(500, 'lỗi kỹ thuật');
-                    }
-                    res.json(result.rows);
-                    console.log(result.rows);
+            if (!req.query.id) {
+                bookModel.findAll().then(books => {
+                    res.json(books);
                 });
             } else {
-                pool.query('select * from book where book.name = $1', [req.params.bookName], (error, result) => {
-                    if (error) {
-                        return res.json(500, 'lỗi kỹ thuật');
-                    }
-                    if (result.rowCount === 0) {
-                        res.status(404).send('tìm không thấy');
-                    } else {
-                        res.json(result.rows);
-                    }
+                bookModel.findById(req.query.id).then(book => {
+                    res.json(book);
                 })
             }
         })
 
+        //tao 1 book
         .post((req,res) => {
-            let id = req.body.id;
-            let name = req.body.name;
-            let author = req.body.author;
-            //sử dụng pg với promise
-            pool.connect().then((client: Client) => {
-                client.query('Insert into book values ($1,$2,$3)',[id,name,author])
-                    .then((result: QueryResult) => {
-                        client.release();
-                        console.log(result.rows);
-                        res.send('Đã thêm book thành công');
-                    })
-                    .catch((error: Error) => {
-                        client.release();
-                        console.error(error.message);
-                        res.status(500).send(error.message);
-                    });
-            });
+            bookModel.create(req.body).then(b =>{
+                res.json(b);
+            })
+            .catch(error => {
+                res.status(500).send(error.message);
+            })
         })
 
+        //sua 1 sach theo id
         .put((req, res) => {
-            pool.query('update book set author = $1 where name = $2',[req.body.author,req.params.bookName],(error,result) => {
-                if(error){
-                    res.status(500).send(error.message);
+            let id = req.query.id;
+            bookModel.findById(id).then(b =>{
+                if(b){
+                    return b.update(req.body);
                 }else{
-                    if(result.rowCount === 0){
-                        res.status(404).send('không tìm thấy sách với tên: ' + req.params.bookName);
-                    }else{
-                        res.send('đã update book: ' + req.params.bookName);
-                    }
+                    return null;
                 }
-            });
+                
+            })
+            .then(b => {
+                if(b){
+                    res.json(b);
+                }else{
+                    res.status(404).send('khong tim thay sach voi id =' + id);
+                }
+            })
+            .catch(error => {
+                res.status(500).send(error.message);
+            })
         })
 
+        //delete a book by id
         .delete((req, res) => {
-            pool.query('Delete from book where name = $1',[req.params.bookName],(error,result) => {
-                if(error){
-                    res.status(500).send(error.message);
+            bookModel.findById(req.query.id).then(b => {
+                if(b){
+                    b.destroy();
+                    return b.name;
                 }else{
-                    if(result.rowCount === 0){
-                        res.status(404).send('Khong tim thay sach');
-                    }else{
-                        res.send('xoa sach thanh cong');
-                    }
+                    return null;
                 }
-            });
+                
+            })
+            .then((v) => {
+                if(v){
+                    res.status(200).send('sach ' + v + ' da duoc huy');
+                }else{
+                    res.status(404).send('khong tim thay sach');
+                }
+                
+            })
+            .catch(error => {
+                res.status(500).send(error.message);
+            })
         });
 
     return router;

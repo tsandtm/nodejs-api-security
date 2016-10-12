@@ -5,7 +5,13 @@ import bookRouter = require('./routes/book.router');
 import humanRouter = require('./routes/human.router');
 import { Promise } from 'es6-promise';
 import { Pool, PoolConfig, QueryResult } from 'pg';
+import * as Book from './models/book';
+import * as Sequelize from './models/sequelize.model';
+import MockData = require('./models/mock-data');
 
+
+//tạo dữ liệu mẫu comment để bỏ
+MockData(Sequelize.book,Sequelize.writer);
 
 let config: PoolConfig = {
     user: 'duc', //env var: PGUSER
@@ -19,16 +25,12 @@ let config: PoolConfig = {
 let pool = new Pool(config);
 let app = express();
 let port = 8080;
-let brouter = bookRouter(pool);
 app.use(body_parser.urlencoded({ extended: true }));
 app.use(body_parser.json());
 
-// app.use((req, res, next) => {
-//     console.log('happen 1');
-//     next();
-// });
 
-app.use('/api',[bookRouter(pool),humanRouter(pool)]);
+
+app.use('/api',[bookRouter(Sequelize.book),humanRouter(pool)]);
 
 
 // app.use((req, res, next) => {
@@ -80,5 +82,3 @@ app.use('/test2/:name?',(req,res) => {
 
 app.listen(port);
 console.log('server run on port: ' + port);
-
-let ap = Promise.resolve();
