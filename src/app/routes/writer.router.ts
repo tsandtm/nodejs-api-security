@@ -43,6 +43,7 @@ export = () => {
         })
 
 
+
         .post((req, res) => {
             writerModel.create(req.body).then(w => {
                 res.json(w);
