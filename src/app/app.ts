@@ -2,7 +2,7 @@ import * as express from 'express';
 import * as body_parser from 'body-parser';
 // import { router as bookRouter } from './routes/book.router';
 import bookRouter = require('./routes/book.router');
-import humanRouter = require('./routes/human.router');
+import humanRouter = require('./routes/writer.router');
 import { Promise } from 'es6-promise';
 import { Pool, PoolConfig, QueryResult } from 'pg';
 import * as Book from './models/book';
@@ -11,7 +11,7 @@ import MockData = require('./models/mock-data');
 
 
 //tạo dữ liệu mẫu comment để bỏ
-MockData(Sequelize.book,Sequelize.writer);
+MockData(Sequelize.book,Sequelize.writer,Sequelize.cat);
 
 let config: PoolConfig = {
     user: 'duc', //env var: PGUSER
@@ -30,7 +30,7 @@ app.use(body_parser.json());
 
 
 
-app.use('/api',[bookRouter(Sequelize.book),humanRouter(pool)]);
+app.use('/api',[bookRouter(),humanRouter()]);
 
 
 // app.use((req, res, next) => {

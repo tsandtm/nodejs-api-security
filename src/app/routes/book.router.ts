@@ -1,13 +1,15 @@
 import { Router } from 'express';
 // import { Book } from '../models/book';
 // import { books } from '../models/mock-data';
-import {BookModel} from '../models/book.model';
+// import {BookModel} from '../models/book.model';
 import { Pool, Client, QueryResult } from 'pg';
+import * as Model from '../models/sequelize.model';
 
 // export const router = Router();
 
-export = function (bookModel: BookModel): Router {
+export = function (): Router {
     let router: Router = Router();
+    let bookModel = Model.book;
 
 
 
@@ -82,6 +84,45 @@ export = function (bookModel: BookModel): Router {
                 res.status(500).send(error.message);
             })
         });
+        
+    // route test quan he        
+    router.route('/bookAuthor')
+        
+        // lay tat ca author cua sach
+        .get((req,res) => {
+            let id = req.query.id;
+            bookModel.findById(id).then(book => {
+                if(book){
+                    book.getAuthors().then(authors => {
+                        res.json(authors);
+                    })
+                }
+                else{
+                    res.status(404).send('khong tim thay book voi id=' + id);
+                }
+            })
+            .catch(error => {
+                res.status(500).send(error.message);
+            })
+        })
+        
+        
+        // tao them author cho sach
+        .put((req,res) => {
+            let id = req.query.id;
+            bookModel.findById(id).then(book => {
+                if(book){
+                    let authorName = req.body.name;
+                    book.createAuthor({ name: authorName})
+                    res.status(200).send('da tao them author vao book');
+                }else{
+                    res.status(404).send('khong tim thay book voi id=' + id);            
+                }
+            })
+            .catch(error => {
+                res.status(500).send(error.message);        
+            })
+        })
 
     return router;
 }
