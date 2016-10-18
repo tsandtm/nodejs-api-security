@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/hong-duc/nodejs-api-security.svg?branch=master)](https://travis-ci.org/hong-duc/nodejs-api-security)
 # Project Nodejs-api-security
 
 ## Việc cần làm sau khi clone:
