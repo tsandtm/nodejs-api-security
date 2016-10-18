@@ -10,7 +10,7 @@
             }
         }
     },
-    "production": {
+    "test": {
         "database": "travis_ci_test",
         "username": "postgres",
         "password": null,
