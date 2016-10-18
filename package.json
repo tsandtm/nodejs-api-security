@@ -5,7 +5,7 @@
   "private": true,
   "main": "./dist/app/app.js",
   "scripts": {
-    "test": "alsatian ./dist/test/**/*.spec.js",
+    "test": "gulp compile && alsatian ./dist/test/**/*.spec.js",
     "start": "gulp",
     "create-mock-data": "gulp compile && node ./dist/scripts/mock-data.js",
     "dropAll": "gulp compile && node ./dist/scripts/drop-all.js"
