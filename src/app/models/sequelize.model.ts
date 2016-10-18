@@ -2,14 +2,11 @@ import * as Sequelize from 'sequelize';
 import * as Book from './book.model';
 import * as Writer from './writer.model';
 import * as Cat from './cat.model';
-
+import path = require('path');
+let env = process.env.NODE_ENV || 'development';
+let config = require(path.join(__dirname,'..','..','config','config.json'))[env];
 // tạo kết nối với csdl từ sequelize
-export let sequelize = new Sequelize('TestDB', 'duc', '123456', {
-    dialect: 'postgres',
-    define: {
-        timestamps: false
-    }
-});
+export let sequelize = new Sequelize(config.database, config.username, config.password,config.config);
 
 // tạo và định nghĩa table book
 export let book = sequelize.define<Book.BookInstance, Book.BookAttribute>('book', {

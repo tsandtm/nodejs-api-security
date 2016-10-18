@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "private": true,
-  "main": "./dist/app/app.js",
+  "main": "./dist/server.js",
   "scripts": {
     "test": "gulp compile && alsatian ./dist/test/**/*.spec.js",
     "start": "gulp",
@@ -49,6 +49,7 @@
   "dependencies": {
     "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",
+    "es6-promise": "^4.0.5",
     "express": "^4.14.0",
     "pg": "^6.1.0",
     "pg-hstore": "^2.3.2",

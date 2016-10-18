@@ -3,7 +3,6 @@ import * as body_parser from 'body-parser';
 // import { router as bookRouter } from './routes/book.router';
 import bookRouter = require('./routes/book.router');
 import humanRouter = require('./routes/writer.router');
-import { Promise } from 'es6-promise';
 import { Pool, PoolConfig, QueryResult } from 'pg';
 import * as Book from './models/book';
 import * as Sequelize from './models/sequelize.model';
@@ -24,7 +23,6 @@ import * as supertest from 'supertest';
 // };
 // let pool = new Pool(config);
 let app = express();
-let port = 8080;
 app.use(body_parser.urlencoded({ extended: true }));
 app.use(body_parser.json());
 
@@ -80,10 +78,8 @@ app.use('/api', [bookRouter.router, humanRouter()]);
 //     })
 // });
 
-app.listen(port);
-console.log('server run on port: ' + port);
 
-
+export default app;
 // let request: supertest.SuperTest<supertest.Test> = supertest('http://localhost:8080/api');
 // request.get('/book')
 //     .expect('Content-Type', /json/)

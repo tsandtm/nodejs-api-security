@@ -32,16 +32,24 @@ export class Gulpfile {
     tsProject: gts.Project = gts.createProject('./tsconfig.json');
     // thư mục sẽ chứa các file js đã được compile
     jsDest: string = 'dist/app';
+    filesToMove: string[] = [
+        './src/config/**/*.*'
+    ];
 
     /**
      * task này sẽ compile các file
      * được khai báo trong phần files của tsconfig
      * và đưa vào thư mục dist/app
      */
-    @Task()
+    @Task('',['move'])
     compile() {
         let tsResult = this.tsProject.src().pipe(this.tsProject(gts.reporter.longReporter()));
         return tsResult.js.pipe(gulp.dest(this.jsDest));
+    }
+
+    @Task()
+    move(){
+        return gulp.src(this.filesToMove,{base: './src'}).pipe(gulp.dest('dist'));
     }
 
     /**
@@ -55,7 +63,7 @@ export class Gulpfile {
     @Task()
     nodemon(done: Function) {
         let callBackCalled = false;
-        return nodemon({ script: './dist/app/app.js', watch: ['dist'] }).on('start', () => {
+        return nodemon({ script: './dist/server.js', watch: ['dist'] }).on('start', () => {
             if (!callBackCalled) {
                 callBackCalled = true;
                 done();

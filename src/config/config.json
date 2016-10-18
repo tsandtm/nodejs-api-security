@@ -1,0 +1,24 @@
+{
+    "development": {
+        "database": "TestDB",
+        "username": "duc",
+        "password": "123456",
+        "config": {
+            "dialect": "postgres",
+            "define": {
+                "timestamps": false
+            }
+        }
+    },
+    "production": {
+        "database": "travis_ci_test",
+        "username": "postgres",
+        "password": null,
+        "config": {
+            "dialect": "postgres",
+            "define": {
+                "timestamps": false
+            }
+        }
+    }
+}

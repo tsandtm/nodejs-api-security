@@ -1,10 +1,20 @@
-import { Expect, Test, TestCase, AsyncTest } from 'alsatian';
+import { Expect, Test, TestCase, AsyncTest, Setup, Teardown } from 'alsatian';
 import * as supertest from 'supertest';
 import * as bluebird from 'bluebird';
 import {bookData} from './test.data';
+import app from '../app/app';
+import {Server} from 'http';
 
 export class BookRouterTest {
     request: supertest.SuperTest<supertest.Test> = supertest('http://localhost:8080/api');
+    instance: Server;
+
+    @Setup
+    public setUp(){
+        this.instance = app.listen(8080,'localhost');
+    }
+
+    
 
     @AsyncTest('should return json array')
     public getAllBook() {
@@ -46,5 +56,11 @@ export class BookRouterTest {
                     })
             }).not.toThrow();
         })
+    }
+
+    @Teardown
+    public tearDown(){
+        this.instance.close();
+        console.log('run 2');
     }
 }
