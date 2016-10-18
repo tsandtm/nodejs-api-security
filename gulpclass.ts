@@ -1,4 +1,4 @@
-import {Gulpclass, Task, SequenceTask} from 'gulpclass/Decorators';
+import { Gulpclass, Task, SequenceTask } from 'gulpclass/Decorators';
 import gulp = require('gulp');
 import gts = require('gulp-typescript');
 // import * as browser_sync from 'browser-sync';
@@ -7,6 +7,8 @@ import uglify = require('gulp-uglify');
 import concat = require('gulp-concat');
 import rename = require('gulp-rename');
 import del = require('del');
+import childp = require('child_process');
+import gutil = require('gulp-util');
 
 
 /**
@@ -24,7 +26,7 @@ import del = require('del');
  * https://github.com/gulpjs/gulp/blob/master/docs/API.md
  */
 @Gulpclass()
-export class Gulpfile{
+export class Gulpfile {
 
     // tạo biến project của gulp-typescript
     tsProject: gts.Project = gts.createProject('./tsconfig.json');
@@ -37,7 +39,7 @@ export class Gulpfile{
      * và đưa vào thư mục dist/app
      */
     @Task()
-    compile(){
+    compile() {
         let tsResult = this.tsProject.src().pipe(this.tsProject(gts.reporter.longReporter()));
         return tsResult.js.pipe(gulp.dest(this.jsDest));
     }
@@ -51,10 +53,10 @@ export class Gulpfile{
      * lên đây để biết thêm chi tiết https://github.com/remy/nodemon 
      */
     @Task()
-    nodemon(done: Function){
+    nodemon(done: Function) {
         let callBackCalled = false;
-        return nodemon({script: './dist/app/app.js'}).on('start',() => {
-            if(!callBackCalled){
+        return nodemon({ script: './dist/app/app.js', watch: ['dist'] }).on('start', () => {
+            if (!callBackCalled) {
                 callBackCalled = true;
                 done();
             }
@@ -67,9 +69,31 @@ export class Gulpfile{
      * và chạy task compile khi có sự thay đổi
      */
     @Task()
-    watch(done: Function){
-        gulp.watch('src/**/*.ts',['compile']);
+    watch(done: Function) {
+        gulp.watch('src/**/*.ts', ['test']);
         done();
+    }
+
+    @Task('', ['compile'])
+    test(done) {
+        let stdout = '';
+        let stderr = '';
+        let child = childp.exec('npm test', { cwd: process.cwd() });
+
+        child.stdout.on('data', (data) => {
+            stdout += data;
+        });
+
+        child.stderr.on('data', (data) => {
+            stderr += data;
+        })
+
+        child.on('close', (code) => {
+            gutil.log('exit with code', code);
+            gutil.log(gutil.colors.blue(stdout));
+            gutil.log(gutil.colors.red(stderr));
+            done();
+        })
     }
 
     /**
@@ -81,8 +105,8 @@ export class Gulpfile{
      * bỏ vào thư mục dist/production, và sau đó tạo file all.min.js
      * và minify file all.js vào file đó và bỏ vào thư mục dist/production 
      */
-    @Task('',['compile'])
-    build(){
+    @Task('', ['compile'])
+    build() {
         return gulp.src('dist/app/**/*.js')
             .pipe(concat('all.js'))
             .pipe(gulp.dest('dist/production'))
@@ -96,7 +120,7 @@ export class Gulpfile{
      * nó sẽ chạy lần lượt các task compile,nodemon,watch
      */
     @SequenceTask()
-    default(){
-         return ['compile','nodemon','watch'];
+    default() {
+        return ['compile','nodemon', 'watch'];
     }
 } 

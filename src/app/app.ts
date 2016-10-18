@@ -7,22 +7,22 @@ import { Promise } from 'es6-promise';
 import { Pool, PoolConfig, QueryResult } from 'pg';
 import * as Book from './models/book';
 import * as Sequelize from './models/sequelize.model';
-import MockData = require('./models/mock-data');
+import * as supertest from 'supertest';
 
 
 //tạo dữ liệu mẫu comment để bỏ
-MockData(Sequelize.book,Sequelize.writer,Sequelize.cat);
 
-let config: PoolConfig = {
-    user: 'duc', //env var: PGUSER
-    database: 'TestDB', //evn var: PGDATABASE
-    password: '', // evn var: PGPASSWORD
-    host: 'localhost', // server hosting postgres database
-    port: 5432, //evn var: PGPORT
-    max: 10, // max number of client pool
-    idleTimeoutMillis: 30000 // how long a client remain idle before close
-};
-let pool = new Pool(config);
+
+// let config: PoolConfig = {
+//     user: 'duc', //env var: PGUSER
+//     database: 'TestDB', //evn var: PGDATABASE
+//     password: '', // evn var: PGPASSWORD
+//     host: 'localhost', // server hosting postgres database
+//     port: 5432, //evn var: PGPORT
+//     max: 10, // max number of client pool
+//     idleTimeoutMillis: 30000 // how long a client remain idle before close
+// };
+// let pool = new Pool(config);
 let app = express();
 let port = 8080;
 app.use(body_parser.urlencoded({ extended: true }));
@@ -30,7 +30,7 @@ app.use(body_parser.json());
 
 
 
-app.use('/api',[bookRouter(),humanRouter()]);
+app.use('/api', [bookRouter.router, humanRouter()]);
 
 
 // app.use((req, res, next) => {
@@ -41,44 +41,53 @@ app.use('/api',[bookRouter(),humanRouter()]);
 /**
  * hàm này dùng để thử cách sử dụng Promise
  */
-function getAllBokk(): Promise<any[]>{
-    return new Promise<any[]>((resolve, reject) => {
-        
-        pool.connect((err, client, done) => {
-            if (err) {
-                // console.error('error fetching client from pool', err);
-                return reject(err);
-            }
-            client.query('select * from book', (err, result) => {
-                //call done() to release the client back to the pool
-                done();
+// function getAllBokk(): Promise<any[]> {
+//     return new Promise<any[]>((resolve, reject) => {
 
-                if (err) {
-                    // console.error('error running query', err);
-                   return reject(err);
-                }
-                // console.log(result.rows);
-                resolve(result.rows);
-            }); 
-        });
-    });
-}
+//         pool.connect((err, client, done) => {
+//             if (err) {
+//                 // console.error('error fetching client from pool', err);
+//                 return reject(err);
+//             }
+//             client.query('select * from book', (err, result) => {
+//                 //call done() to release the client back to the pool
+//                 done();
 
-app.use('/test', (req, res) => {
-    getAllBokk().then((value) => {
-        res.json(value);
-    })
-    .catch(err => {
-        console.error('Failed', err);
-        res.send(err.message);
-    });
-});
+//                 if (err) {
+//                     // console.error('error running query', err);
+//                     return reject(err);
+//                 }
+//                 // console.log(result.rows);
+//                 resolve(result.rows);
+//             });
+//         });
+//     });
+// }
 
-app.use('/test2/:name?',(req,res) => {
-    pool.query('select * from book',(err,result) =>{
-        res.json(result.rows);
-    })
-});
+// app.use('/test', (req, res) => {
+//     getAllBokk().then((value) => {
+//         res.json(value);
+//     })
+//         .catch(err => {
+//             console.error('Failed', err);
+//             res.send(err.message);
+//         });
+// });
+
+// app.use('/test2/:name?', (req, res) => {
+//     pool.query('select * from book', (err, result) => {
+//         res.json(result.rows);
+//     })
+// });
 
 app.listen(port);
 console.log('server run on port: ' + port);
+
+
+// let request: supertest.SuperTest<supertest.Test> = supertest('http://localhost:8080/api');
+// request.get('/book')
+//     .expect('Content-Type', /json/)
+//     .expect(200)
+//     .end((err, res) => {
+//         if (err) throw err;
+//     })

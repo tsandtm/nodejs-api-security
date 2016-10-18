@@ -12,7 +12,7 @@ export let sequelize = new Sequelize('TestDB', 'duc', '123456', {
 });
 
 // tạo và định nghĩa table book
-export let book: Book.BookModel = sequelize.define<Book.BookInstance, Book.BookAttribute>('book', {
+export let book = sequelize.define<Book.BookInstance, Book.BookAttribute>('book', {
     'id': {
         'type': Sequelize.INTEGER,
         'primaryKey': true,
@@ -43,12 +43,6 @@ export let cat: Cat.CatModel = sequelize.define<Cat.CatInstance,Cat.CatAttribute
         'autoIncrement': true
     },
     'name':{
-        'type': Sequelize.STRING
-    },
-    'color':{
-        'type': Sequelize.STRING
-    },
-    'gender':{
         'type': Sequelize.STRING
     }
 }); 
