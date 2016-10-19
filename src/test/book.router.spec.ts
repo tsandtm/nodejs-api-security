@@ -61,6 +61,5 @@ export class BookRouterTest {
     @Teardown
     public tearDown(){
         this.instance.close();
-        console.log('run 2');
     }
 }

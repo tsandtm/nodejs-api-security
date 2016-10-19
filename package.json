@@ -5,10 +5,10 @@
   "private": true,
   "main": "./dist/server.js",
   "scripts": {
-    "test": "gulp compile && npm run create-mock-data && alsatian ./dist/test/**/*.spec.js && npm run dropAll",
+    "test": "alsatian ./dist/test/**/*.spec.js",
     "start": "gulp",
     "create-mock-data": "node ./dist/scripts/mock-data.js",
-    "dropAll": "node ./dist/scripts/drop-all.js"
+    "drop-all": "node ./dist/scripts/drop-all.js"
   },
   "keywords": [],
   "author": "",
