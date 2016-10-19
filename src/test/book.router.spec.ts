@@ -12,10 +12,11 @@ export class BookRouterTest {
     @Setup
     public setUp(){
         this.instance = app.listen(8080,'localhost');
+        console.log('chay setup')
     }
 
     
-
+    
     @AsyncTest('should return json array')
     public getAllBook() {
         return new bluebird((resolve, reject) => {
@@ -34,9 +35,11 @@ export class BookRouterTest {
                         }
                     })
             }).not.toThrow();
+
         })
     }
 
+    
     @AsyncTest('should return book with name book1')
     public getABook(){
         return new bluebird((resolve, reject) => {
@@ -61,5 +64,6 @@ export class BookRouterTest {
     @Teardown
     public tearDown(){
         this.instance.close();
+        console.log('chay Teardown')
     }
 }

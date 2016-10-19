@@ -10,3 +10,5 @@ before_script:
 - npm run create-mock-data
 after_script:
 - npm run drop-all
+notifications:
+  slack: nodejsapisecurity:sz840dPqzq2zgUnjlkSA9BRe
