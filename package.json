@@ -5,10 +5,11 @@
   "private": true,
   "main": "./dist/server.js",
   "scripts": {
-    "test": "gulp compile && alsatian ./dist/test/**/*.spec.js",
+    "test": "gulp compile && alsatian ./dist/test/book.router.spec.js",
     "start": "gulp",
     "create-mock-data": "node ./dist/scripts/mock-data.js",
-    "drop-all": "node ./dist/scripts/drop-all.js"
+    "drop-all": "node ./dist/scripts/drop-all.js",
+    "alsatian-version": "alsatian -v"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +27,7 @@
     "@types/gulp-typescript": "0.0.32",
     "@types/gulp-uglify": "0.0.29",
     "@types/gulp-util": "^3.0.29",
+    "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.41",
     "@types/pg": "^6.1.33",
     "@types/pg-pool": "0.0.2",
@@ -43,6 +45,7 @@
     "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.7",
     "gulpclass": "^0.1.1",
+    "mocha": "^3.1.2",
     "supertest": "^2.0.0",
     "typescript": "^2.0.3"
   },

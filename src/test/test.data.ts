@@ -6,5 +6,10 @@ export let bookData = [
     {
         id: 2,
         name: 'book2'
+    },
+    {
+        id: 3,
+        name: 'book3'
     }
 ]
+
