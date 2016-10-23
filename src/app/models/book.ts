@@ -1,9 +1,8 @@
-export class Book {
+import {ModelBase} from './model.base';
+
+
+export class Book extends ModelBase {
     name: string;
     author: string;
-    constructor(name: string, author: string){
-        this.author = author;
-        this.name = name;
-    }
 }
 

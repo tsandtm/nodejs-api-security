@@ -78,7 +78,7 @@ export class Gulpfile {
      */
     @Task()
     watch(done: Function) {
-        gulp.watch('src/**/*.ts', ['test']);
+        gulp.watch('src/**/*.ts', ['compile']);
         done();
     }
 
