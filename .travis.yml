@@ -4,9 +4,10 @@ services: postgresql
 env:
 - NODE_ENV=test
 before_script:
-- psql -c 'create database travis_ci_test;' -U postgres
 - npm install -g gulp-cli
 - gulp compile
+- npm run create-database
+- npm run create-schema
 - npm run create-mock-data
 after_script:
 - npm run drop-all
