@@ -1,15 +1,21 @@
-import * as Sequelize from 'sequelize';
+// import * as Sequelize from 'sequelize';
 import path = require('path');
+import {PgPool} from './pg-pool'
+import { Pool } from 'pg';
 let env = process.env.NODE_ENV || 'development';
-let config = require(path.join(__dirname, '..', '..', 'config', 'config.json'))[env];
+let config = require(path.join(__dirname, '..', '..', 'config', 'database.config.json'))[env];
 
-export abstract class RepoBase{
-   private static sequelize: Sequelize.Sequelize;
+export abstract class RepoBase {
 
-   public static getSequelize(): Sequelize.Sequelize{
-       if(!this.sequelize){
-           this.sequelize = new Sequelize(config.database, config.username, config.password, config.config);
-       }
-       return this.sequelize;
-   }
+    protected _pgPool: Pool;
+
+    public constructor() {
+        this._pgPool = PgPool.getPool();
+    }
+
+    //public abstract getList(option);
+    //public abstract getOne(option);
+    // them vai thu nua
+    
+
 }

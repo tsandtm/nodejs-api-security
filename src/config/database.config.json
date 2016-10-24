@@ -11,11 +11,13 @@
             }
         },
         "host": "localhost",
-        "port": 8080,
+        "port": 5432,
+        "ssl": false,
         "pool":{
-            "max": 10,
-            "min": 0
+            "max": 20,
+            "min": 4
         },
+        "idleTimeoutMillis": 2000,
         "schema": "test"
         
     },
@@ -31,11 +33,13 @@
             }
         },
         "host": "localhost",
-        "port": 8080,
+        "port": 5432,
+        "ssl": false,
         "pool":{
-            "max": 10,
-            "min": 0
+            "max": 20,
+            "min": 4
         },
+        "idleTimeoutMillis": 2000,
         "schema": "test"
     }
 }

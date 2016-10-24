@@ -1,9 +1,9 @@
 // đây là vùng import tất cả các modules bên ngoài
-import { Router, Response } from 'express';
+import { Router, Response, Request } from 'express';
 
 
 // import các module tạo table
-import {BookRepo} from '../repositories/book.repo';
+import { BookRepo } from '../repositories/book.repo';
 
 // khai báo router và export nó ra cho bên ngoài import vào
 
@@ -16,49 +16,57 @@ import {BookRepo} from '../repositories/book.repo';
 export class BookRouter {
 
     private router: Router;
-    private bookRepo: BookRepo = new BookRepo();
+    private bookRepo: BookRepo;
 
     constructor() {
         this.router = Router();
+        this.bookRepo = new BookRepo();
 
         //this.model = model;
     }
 
+
     public getRouter(): Router {
 
         this.router.route('/book').get(this.getAllBook)
-                .post(this.createABook)
-                .delete(this.deleteABook)
+            .post(this.createABook)
+            .delete(this.deleteABook);
+        
+        this.router.get('/countBook',this.countBook)
 
 
         return this.router;
     }
 
-    private getAllBook(req, res: Response) {
+    private getAllBook = (req: Request, res: Response) => {
+        let object={ id: 1, name: 'book1' };
 
-        this.bookRepo.getAllBook()
-            .then(books => {
-                res.json(books)
+        this.bookRepo.getList(null)
+            .then(result => {
+                res.status(200).json(result)
             })
             .catch(error => {
+                console.error(error.message);
                 res.status(500).send(error.message)
             })
-        // if (!req.query.id) {
-        //     this.model.getBookModel().findAll().then(books => {
-        //         res.json(books);
-        //     });
-        // } else {
-        //     this.model.getBookModel().findById(req.query.id).then(book => {
-        //         res.json(book);
-        //     })
-        // }
     }
 
-    private createABook(req,res){
+    private countBook = (req: Request,res: Response) => {
+        this.bookRepo.count(null)
+            .then(result => {
+                res.status(200).json(result);
+            })
+            .catch(error => {
+                console.error(error.message);
+                res.status(500).send(error.message);
+            })
+    }
+
+    private createABook = (req, res) => {
         res.send('created')
     }
 
-    private deleteABook(req,res){
+    private deleteABook = (req, res) => {
         res.send('deleted')
     }
 

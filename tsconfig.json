@@ -6,9 +6,20 @@
         "noImplicitAny": false,
         "removeComments": true,
         "noLib": false,
-        "experimentalDecorators": true
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
     },
-    "files": [
-        "src/**/*.ts"
+    "include":[
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "gulpclass.ts",
+        "dist",
+        ".vscode",
+        "src/app/repositories/sequelize.model.ts",
+        "src/scripts/mock-data.ts",
+        "src/scripts/drop-all.ts",
+        "src/app/routes/writer.router.ts"
     ]
 }

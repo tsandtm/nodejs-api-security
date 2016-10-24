@@ -13,14 +13,12 @@ app.use(body_parser.urlencoded({ extended: true }));
 app.use(body_parser.json());
 
 
-// import {Model} from './models/sequelize.model';
-// import routers 
+// import router
 import {BookRouter} from './routes/book.router';
-import humanRouter = require('./routes/writer.router');
 
 
 
 // sử dụng các router được định nghĩa từ các modules
-app.use('/api', [(new BookRouter()).getRouter(), humanRouter()]);
+app.use('/api', [(new BookRouter()).getRouter()]);
 
 export default app;

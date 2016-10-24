@@ -31,7 +31,7 @@ export class Gulpfile {
     // tạo biến project của gulp-typescript
     tsProject: gts.Project = gts.createProject('./tsconfig.json');
     // thư mục sẽ chứa các file js đã được compile
-    jsDest: string = 'dist/app';
+    jsDest: string = 'dist';
     filesToMove: string[] = [
         './src/config/**/*.*'
     ];
@@ -121,6 +121,11 @@ export class Gulpfile {
             .pipe(rename('all.min.js'))
             .pipe(uglify())
             .pipe(gulp.dest('dist/production'));
+    }
+
+    @Task()
+    delDist(){
+        return del(this.jsDest);
     }
 
     /**
